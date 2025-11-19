@@ -28,11 +28,12 @@ public class AddActivity extends AppCompatActivity {
     };
 
     private static final String[] RANDOM_IMAGES = new String[]{
-            "https://picsum.photos/seed/workout1/600/400",
-            "https://picsum.photos/seed/workout2/600/400",
-            "https://picsum.photos/seed/workout3/600/400",
-            "https://picsum.photos/seed/workout4/600/400",
-            "https://picsum.photos/seed/workout5/600/400"
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images.jpg",
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images%20(1).jpg",
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images%20(2).jpg",
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images%20(3).jpg",
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images%20(4).jpg",
+            "https://raw.githubusercontent.com/lyemee/MobileAppDev_finalExam/main/images%20(5).jpg"
     };
 
     private static final String KEY_TYPE_POS = "key_type_pos";
@@ -91,7 +92,6 @@ public class AddActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        // 🔁 Restore UI state + preview after rotation
         if (savedInstanceState != null) {
             int pos = savedInstanceState.getInt(KEY_TYPE_POS, 0);
             spnType.setSelection(pos);
