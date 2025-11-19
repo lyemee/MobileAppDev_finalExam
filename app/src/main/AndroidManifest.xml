@@ -1,13 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.final_exam">
 
-    <!-- Internet for image fetching -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Android 10+ may require this for step sensors on some devices -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
-    <!-- Declare sensor feature optional (graceful fallback if missing) -->
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false" />
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="false" />
 
