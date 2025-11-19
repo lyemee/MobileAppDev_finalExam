@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +35,12 @@ public class AddActivity extends AppCompatActivity {
             "https://picsum.photos/seed/workout5/600/400"
     };
 
-    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    private static final String KEY_TYPE_POS = "key_type_pos";
+    private static final String KEY_DURATION = "key_duration";
+    private static final String KEY_IMAGE_URL = "key_image_url";
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
@@ -76,7 +83,6 @@ public class AddActivity extends AppCompatActivity {
                 return;
             }
 
-            // URL optional; save even if empty (clicking on main will show "No image" toast)
             Workout w = new Workout(type, minutes, url, System.currentTimeMillis());
             Storage.saveWorkout(this, w);
             Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
@@ -85,11 +91,28 @@ public class AddActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
+        // 🔁 Restore UI state + preview after rotation
         if (savedInstanceState != null) {
-            // Glide will re-load by URL if present
-            String url = etImageUrl.getText().toString().trim();
-            if (!url.isEmpty()) loadPreview(url);
+            int pos = savedInstanceState.getInt(KEY_TYPE_POS, 0);
+            spnType.setSelection(pos);
+
+            String dur = savedInstanceState.getString(KEY_DURATION, "");
+            etDuration.setText(dur);
+
+            String url = savedInstanceState.getString(KEY_IMAGE_URL, "");
+            etImageUrl.setText(url);
+            if (!TextUtils.isEmpty(url)) {
+                loadPreview(url);
+            }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_TYPE_POS, spnType.getSelectedItemPosition());
+        outState.putString(KEY_DURATION, etDuration.getText().toString().trim());
+        outState.putString(KEY_IMAGE_URL, etImageUrl.getText().toString().trim());
     }
 
     private void loadPreview(String url) {
@@ -99,10 +122,9 @@ public class AddActivity extends AppCompatActivity {
         }
         Glide.with(this)
                 .load(url)
-                .timeout(8000) // graceful timeout
+                .timeout(8000)
                 .placeholder(android.R.drawable.stat_sys_download)
                 .error(android.R.drawable.ic_delete)
                 .into(ivPreview);
     }
 }
-
