@@ -69,12 +69,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void updateList() {
-        List<Workout> toShow = all.size() > 5 ? all.subList(0, 5) : new ArrayList<>(all);
-        adapter = new RecentAdapter(toShow, w -> {
-            // Clicking a recent item shows its image
-            ImageDialog.newInstance(w.imageUrl).show(getSupportFragmentManager(), "img");
-        });
-        rv.setAdapter(adapter);
+        // Make a copy so you don't mutate 'all'
+        List<Workout> sorted = new ArrayList<>(all);
+
+        // Sort NEWEST first. Assumes Workout has a timestampMillis (or similar).
+        // Change the field name if yours is different.
+        sorted.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
+
+        List<Workout> toShow = sorted.size() > 5 ? sorted.subList(0, 5) : sorted;
+        if (adapter == null) {
+            adapter = new RecentAdapter(toShow, w ->
+                    ImageDialog.newInstance(w.imageUrl).show(getSupportFragmentManager(), "img")
+            );
+            rv.setAdapter(adapter);
+        } else {
+            adapter.setItems(toShow);
+        }
     }
 
     @Override protected void onResume() {

@@ -38,6 +38,13 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.VH> {
 
     @Override public int getItemCount() { return items.size(); }
 
+    public void setItems(List<Workout> newItems) {
+        items.clear();
+        items.addAll(newItems);
+        notifyDataSetChanged();
+    }
+
+
     static class VH extends RecyclerView.ViewHolder {
         TextView type, duration;
         VH(@NonNull View itemView) {
