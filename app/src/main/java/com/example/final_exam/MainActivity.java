@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/** Shows today's step count live + the five most recent workouts (click to view image). */
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
@@ -69,11 +68,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void updateList() {
-        // Make a copy so you don't mutate 'all'
         List<Workout> sorted = new ArrayList<>(all);
 
-        // Sort NEWEST first. Assumes Workout has a timestampMillis (or similar).
-        // Change the field name if yours is different.
         sorted.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
 
         List<Workout> toShow = sorted.size() > 5 ? sorted.subList(0, 5) : sorted;
@@ -89,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override protected void onResume() {
         super.onResume();
-        // Refresh workouts in case something was added
         all = Storage.loadWorkouts(this);
         updateList();
         ensureStepPermissionAndStart();
@@ -127,10 +122,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // TYPE_STEP_COUNTER gives total steps since last reboot.
         String key = todayKey();
 
-        // Reset baseline if day changed
         String savedDate = Storage.getSavedDate(this);
         if (!key.equals(savedDate)) {
             Storage.setStepBaseline(this, key, event.values[0]);
@@ -145,6 +138,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         tvStepCount.setText(String.valueOf(todaySteps));
     }
 
-    @Override public void onAccuracyChanged(Sensor sensor, int accuracy) { /* no-op */ }
+    @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {  }
 }
 

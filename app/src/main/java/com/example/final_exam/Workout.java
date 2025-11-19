@@ -4,7 +4,7 @@ public class Workout {
     public String type;
     public int durationMinutes;
     public String imageUrl;
-    public long timestamp; // for sorting (most recent first)
+    public long timestamp;
 
     public Workout() {}
 
